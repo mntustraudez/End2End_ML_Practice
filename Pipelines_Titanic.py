@@ -3,18 +3,19 @@ import numpy
 import sklearn 
 
 
-class Titanic_Pipe (pandas.DataFrame):
+class Titanic_Pipe (pandas.DataFrame, report_ = False , return_ =False):
     def __init__ (self, csv_file):
         """initiating and read data
         Arg: 
         data = 'CSV' name (str)
-
-
         """
         assert type(csv_file) == str , "file name must be string"
         super (Titanic_Pipe,self).__init__()
         self.csv_file= csv_file
         self.frame = pandas.read_csv(self.csv_file)
+        self.preprocessed_ = None
+        self.report_= report_
+        self.return_= return_
 
 
     def add_report (self, print_, text):
@@ -24,7 +25,7 @@ class Titanic_Pipe (pandas.DataFrame):
         else:
             pass
 
-    def Data_Inputting (self, show_report , return_data):
+    def Data_Inputting (self, show_report = self.report_, return_data =  self.return_):
         
         """ This class return a quick technical summary
         Arg:
