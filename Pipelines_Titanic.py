@@ -1,11 +1,14 @@
+from logging import warning
 import pandas
 import numpy
 import sklearn
+import warnings
+warnings.filterwarnings("ignore")
 
 
 
 class Titanic_Pipe (pandas.DataFrame):
-    def __init__ (self, csv_file, target= False, drop_columns= False , report_ = False , return_ = False):
+    def __init__ (self, csv_file, target = False, drop_columns = False , report_ = False , return_ = False):
         """initiating and read data
         Arg: 
         data = 'CSV' name (str)
@@ -13,7 +16,7 @@ class Titanic_Pipe (pandas.DataFrame):
         assert type(csv_file) == str , "file name must be string"
         super (Titanic_Pipe,self).__init__()
         self.frame = pandas.read_csv(csv_file)
-        self.preprocessed_ = None
+        self.preprocessed_ = pandas.DataFrame()
         self.report_= report_
         self.return_= return_
         self.target = target
@@ -60,7 +63,7 @@ class Titanic_Pipe (pandas.DataFrame):
 
         #Dropping Selected Columns
         if self.drop_columns != False:
-            self.preprocessed_ = self.drop([self.drop_columns],axis = 1,  inplace=True)
+            self.frame.drop(self.drop_columns,axis = 1,  inplace=True)
 
         # Splitting data into data type
         col_number = self.frame.select_dtypes([numpy.number]).columns.to_list()
@@ -88,9 +91,10 @@ class Titanic_Pipe (pandas.DataFrame):
                 
                 if col_ in col_str:
                    #counting str
+                   print(col_)
                    num_missing = self.frame[col_].isna().sum()
                    self.add_report(show_report,f"--> The columns {col_} has {num_missing} missing values")
-                   self.preprocessed_[col_]  = self.preprocessed_[col_].fillna(self.frame[col_].median(), inplace=True) 
+                   self.preprocessed_[col_]  = self.preprocessed_[col_].fillna(self.frame[col_].mode()[0], inplace=True) 
             
             self.add_report(show_report,"--> Filling Nan Values with mean and mode")
             
