@@ -91,10 +91,17 @@ class Titanic_Pipe (pandas.DataFrame):
                 
                 if col_ in col_str:
                    #counting str
-                   print(col_)
                    num_missing = self.frame[col_].isna().sum()
                    self.add_report(show_report,f"--> The columns {col_} has {num_missing} missing values")
                    self.preprocessed_[col_]  = self.preprocessed_[col_].fillna(self.frame[col_].mode()[0], inplace=True) 
             
             self.add_report(show_report,"--> Filling Nan Values with mean and mode")
+            if return_data :
+                return self.preprocessed_
+        else:
+            if return_data:
+                return self.preprocessed_
             
+
+    def next_step (self):
+        pass
